@@ -1,7 +1,16 @@
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
-
-export default{
+import Container from "postcss/lib/container";
+import Logo from "./Logo";
+import LogoutButton from "./Header/LogoutButton";
+import Button from "./Button";
+import Input from "postcss/lib/input";
+export {
     Header,
-    Footer
+    Footer,
+    Container,
+    Logo,
+    LogoutButton,
+    Button,
+    Input
 }

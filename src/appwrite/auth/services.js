@@ -1,20 +1,20 @@
-import Config from "../../config/config";
+import Config from "../../config/config.js";
 import { Client, ID, Databases, Storage, Query } from "appwrite";
 
-export class Services {
+export class Services{
   client = new Client()
   databases;
   storage;
 
   constructor(){
     this.client
-    .setEndpoint(Config.appwriteURL)
+    .setEndpoint(Config.appwriteUrl)
     .setProject(Config.appwriteProjectId);
     this.databases = new Databases(this.client)
     this.storage = new Storage(this.client)
   }
 
-  async createPost({title, slug, content, featureImage, status, userId}){
+  async createPost({title, slug, content, featuredImage, status, userId}){
        
     try {
         return await this.databases.createDocument(
@@ -24,7 +24,7 @@ export class Services {
             {
                title,
                content,
-                featureImage,
+                featuredImage,
                 status,
                 userId,
             }
@@ -32,11 +32,12 @@ export class Services {
         )
         
     } catch (error) {
-        throw error
+        throw console.log("Appwrite service :: createPost :: error",  error);
+        
     }
   }
 
-  async updatePost(slug ,{title,  content, featureImage, status}){
+  async updatePost(slug ,{title,  content, featuredImage, status}){
     try {
       return await this.databases.updateDocument(
         Config.appwriteDatabaseId,
@@ -46,7 +47,7 @@ export class Services {
          title,
          content,
          status,
-         featureImage,
+         featuredImage,
          }
       )
     } catch (error) {
@@ -57,7 +58,7 @@ export class Services {
 
   async deletePost(slug){
   try {
-     await this.databases.deletePost(
+     await this.databases.deleteDocument(
       Config.appwriteDatabaseId,
       Config.appwriteCollectionId,
       slug,
@@ -69,7 +70,7 @@ export class Services {
   }
   }
   
-  async getPost(){
+  async getPost(slug){
     try {
       
       return await this.databases.getDocument(
@@ -93,9 +94,11 @@ export class Services {
       )
     } catch (error) {
       console.log("Appwrite service :: getPosts :: error", error);
-      
+      return false;
     }
   }
+  // file upload services
+
    async uploadFile(file){
     try {
       return await this.bucket.createFile(
